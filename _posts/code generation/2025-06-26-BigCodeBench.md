@@ -63,7 +63,8 @@ Code Interpreter도 mocking test를 작성하지 못한다거나 bug가 잘 해�
 - Docstring과 구현, test case가 맞아떨어지는지 확인
 - Docstring에 적힌 라이브러리가 `import` 되어있는지 확인
 - Test case과 `unittest` framework로 encapsulate 되어있는지 확인
-- Test case가 deterministic한지 확인
+- Test case가 deterministic한지 
+  
 **Pre-Evaluation**: GPT-3.5-turbo를 이용해 task가 잘 작성되었는지 확인한다. 만약 코드를 잘 생성하는데 실패한 경우 docstring을 더 명확하게 수정한다.
 **Cross-Checking**: 위 과정에 관여하지 않은 추가 인원이 cross-checking한다. 검증보다는 utility 위주로 refactor한다. 각 annotator들은 docstring이 task description, function paramter, expected return, exception handling, required module, example들을 포함하는지 확인하고 수정한다. 사용하지 않은 imported moudle도 제거한다. 마지막으로 github container registry를 활용해 구현을 검증한 뒤, annotator들이 몇 개를 골라서 직접 코드를 작성해서 benchmark 구성을 완료한다.
 
