@@ -47,12 +47,14 @@ LLM은 자기가 생성한 코드랑 비슷한 코드를 잘 맞추는 경향성
 
 ### Semi-Automatic Program Refactoring & Test Case Generation 
 LLM으로 코드를 생성했기 때문에 undeclared variable, runtime bug 등의 문제가 있을 수 있다. 그러므로 ground-truth solution으로 바로 활용하기 어렵다. 그러므로 testing을 통해 생성한 코드의 검증이 필요하다. 하지만 LLM이 생성한 코드를 일일이 이해하고 testing을 위해 refactoring하는 것은 많은 노력이 필요하다. 대신에, GPT-4의 Code Interpreter를 이용해 검증을 진행했다.
+
 - Human Aspect: 13명의 annotator들이 자기가 선호하는 data type (e.g. SQL, built-in, CSV) 과 task scenario (DA, network, visualization) 에 맞는 코드들을 할당받는다. 분류 과정은 GPT-4 API를 이용했다. 각 annotator는 GPT-4를 이용해 할당된 코드를 실행하고 버그가 발생하거나 testing을 통과하지 못하면 반복적으로 refinement하는 방식을 사용한다.
 - LLM Aspect: LLM은 다음을 포함한 프롬프트를 받게 된다.
   - 사용하지 않은 라이브러리는 제거하고 필요한 라이브러리 추가
   - PEP-257 convention에 맞게 docstring 재작성
   - docstring의 instruction과 맞아떨어지는 구현 작성
   - test case를 작성하고 실행
+
 Code Interpreter도 mocking test를 작성하지 못한다거나 bug가 잘 해결되지 않는 경우 session time out이 발생할 때까지 계속 수정을 반복하기 때문에 사람이 지켜보면서 feedback을 해주어야 한다. 위 과정을 거친 후 test case가 잘 작성되지 않은 경우를 제외하니 1223개의 task가 생성되었다.
 
 ### Human Curation
@@ -66,6 +68,7 @@ Code Interpreter도 mocking test를 작성하지 못한다거나 bug가 잘 해�
 - Test case가 deterministic한지 
   
 **Pre-Evaluation**: GPT-3.5-turbo를 이용해 task가 잘 작성되었는지 확인한다. 만약 코드를 잘 생성하는데 실패한 경우 docstring을 더 명확하게 수정한다.
+
 **Cross-Checking**: 위 과정에 관여하지 않은 추가 인원이 cross-checking한다. 검증보다는 utility 위주로 refactor한다. 각 annotator들은 docstring이 task description, function paramter, expected return, exception handling, required module, example들을 포함하는지 확인하고 수정한다. 사용하지 않은 imported moudle도 제거한다. 마지막으로 github container registry를 활용해 구현을 검증한 뒤, annotator들이 몇 개를 골라서 직접 코드를 작성해서 benchmark 구성을 완료한다.
 
 ### Benchmarking NL-Oriented Instructions to Code Generatinos

@@ -6,7 +6,7 @@ categories:
   - 논문리뷰
 tags:
   - Code Generation
-  - LLM(
+  - LLM
 excerpt: "SelfCodeAlign"
 use_math: True
 classes: wide
